@@ -7,10 +7,12 @@
       "esnext"
     ],
     "allowJs": false,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "alwaysStrict": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
