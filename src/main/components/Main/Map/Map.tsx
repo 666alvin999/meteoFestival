@@ -12,14 +12,20 @@ type Festival = {
     website: string,
     festivalType: string,
     period: string,
-    geocoding: Array<number>
+    geocoding: {
+        lat: number,
+        lon: number
+    }
+    temperature: number,
+    weather: string
 }
 
 const MapWrapper = styled.div`
-  height: 100vw;
+  background-color: #6b9ac4;
+  grid-row: 2/3;
 `;
 
-const PersonalMap = (props): JSX.Element => {
+const PersonalMap = (): JSX.Element => {
 
     const [mapRef, setMapRef] = useState<MapRef | null>(null);
     const [festivals, setFestivals] = useState<Array<Festival>>([]);
@@ -30,7 +36,7 @@ const PersonalMap = (props): JSX.Element => {
         if (response.ok) {
             const responseData = await response.json();
 
-            const temp: Array<Festival> = responseData.results.map(data => {
+            const temp: Array<Festival> = responseData.results.map((data) => {
                 const festival: Festival = {
                     name: data.nom_du_festival,
                     departement: data.departement_principal_de_deroulement,
@@ -39,8 +45,21 @@ const PersonalMap = (props): JSX.Element => {
                     website: data.site_internet_du_festival,
                     festivalType: data.discipline_dominante,
                     period: data.periode_principale_de_deroulement_du_festival,
-                    geocoding: [data.geocodage_xy.lat, data.geocodage_xy.lon]
+                    geocoding: {lat: data.geocodage_xy.lat, lon: data.geocodage_xy.lon},
+                    temperature: NaN,
+                    weather: ""
                 }
+
+                fetch(`https://api.weatherbit.io/v2.0/current?lat=${festival.geocoding.lat}&lon=${festival.geocoding.lon}&lang=fr&key=${process.env.REACT_APP_WEATHER_API_KEY}`)
+                    .then((response) => {
+                        return response.json()
+                    })
+                    .then((weatherData) => {
+                        festival.temperature = weatherData.data.temp;
+                        festival.weather = weatherData.data.weather.description;
+                    })
+                    .catch()
+
                 return festival;
             });
 
@@ -54,14 +73,10 @@ const PersonalMap = (props): JSX.Element => {
 
     return (
         <>
-            <MapWrapper>
+            <MapWrapper style={{height: "93vh"}}>
                 <Map
                     ref={(ref) => setMapRef(ref)}
                     mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN as string}
-                    style={{
-                        width: "100%",
-                        height: "100%"
-                    }}
                     initialViewState={{
                         latitude: 42.8590,
                         longitude: 2.7,
@@ -79,6 +94,8 @@ const PersonalMap = (props): JSX.Element => {
                              <h3 style="font-size: 14px">${festival.festivalType}</h3>
                              <p>${festival.city || ""}, ${festival.departement || ""}</p>
                              <p>${festival.address || ""}</p>
+                             <br>
+                             <p>${festival.temperature}°C - ${festival.weather}</p>
                             ${festival.period}
                             `);
 
@@ -87,8 +104,8 @@ const PersonalMap = (props): JSX.Element => {
                                     <Marker
                                         style={{height: "2px"}}
                                         color={"red"}
-                                        longitude={festival.geocoding[1]}
-                                        latitude={festival.geocoding[0]}
+                                        longitude={festival.geocoding.lon}
+                                        latitude={festival.geocoding.lat}
                                         popup={popup}
                                     />
                                 </>
