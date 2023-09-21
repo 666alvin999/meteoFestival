@@ -16,7 +16,7 @@ type Festival = {
 }
 
 const MapWrapper = styled.div`
-  height: 600px;
+  height: 100vw;
 `;
 
 const PersonalMap = (props): JSX.Element => {
@@ -60,14 +60,12 @@ const PersonalMap = (props): JSX.Element => {
                     mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN as string}
                     style={{
                         width: "100%",
-                        height: "100%",
-                        borderRadius: "20px",
-                        zIndex: "1"
+                        height: "100%"
                     }}
                     initialViewState={{
-                        latitude: 46.8590,
+                        latitude: 42.8590,
                         longitude: 2.7,
-                        zoom: 5
+                        zoom: 5.5
                     }}
                     mapStyle="mapbox://styles/666alvin999/clmsr5gad00ij01qndyoge8rd"
                 >
@@ -83,6 +81,7 @@ const PersonalMap = (props): JSX.Element => {
                              <p>${festival.address || ""}</p>
                             ${festival.period}
                             `);
+
                             return (
                                 <>
                                     <Marker
@@ -91,7 +90,6 @@ const PersonalMap = (props): JSX.Element => {
                                         longitude={festival.geocoding[1]}
                                         latitude={festival.geocoding[0]}
                                         popup={popup}
-
                                     />
                                 </>
                             )

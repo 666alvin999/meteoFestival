@@ -6,6 +6,7 @@ const StyledHeader = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  height: 80px;
 `;
 
 const Header = (props): JSX.Element => {
@@ -14,7 +15,7 @@ const Header = (props): JSX.Element => {
             <StyledHeader className="GridBox">
                 <Logo>
                     <LogoMeteo>Météo</LogoMeteo>
-                    <LogoFestival>Festival</LogoFestival>
+                    <LogoFestival>Festivals</LogoFestival>
                 </Logo>
             </StyledHeader>
         </>
