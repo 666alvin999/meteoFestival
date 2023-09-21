@@ -3,8 +3,6 @@ import styled from "styled-components";
 
 const StyledHeader = styled.div`
   background-color: #6b9ac4;
-  grid-column: 1/4;
-  grid-row: 1/2;
   display: flex;
   flex-direction: column;
   justify-content: center;

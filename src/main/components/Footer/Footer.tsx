@@ -13,6 +13,7 @@ const Footer = (props): JSX.Element => {
     return (
         <>
             <StyledFooter className="GridBox">
+                <p>Created by Hamaide Alvin</p>
             </StyledFooter>
         </>
     );
