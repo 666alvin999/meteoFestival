@@ -1,12 +1,11 @@
 import styled from "styled-components";
-import {Map, Marker, NavigationControl} from "react-map-gl";
+import {Map, MapRef, Marker, NavigationControl} from "react-map-gl";
 import {useEffect, useState} from "react";
-
-
+import {SearchBar} from "../SearchBar";
+import mapboxgl, {PopupOptions} from "mapbox-gl";
 
 type Festival = {
     name: string,
-    region: string,
     departement: string,
     city: string,
     address: string,
@@ -22,13 +21,8 @@ const MapWrapper = styled.div`
 
 const PersonalMap = (props): JSX.Element => {
 
-    const viewPort = {
-        latitude: 48.8590,
-        longitude: 2.3039,
-        zoom: 4
-    }
-
-    const [festivals, setFestivals] = useState<Array<Festival>>([])
+    const [mapRef, setMapRef] = useState<MapRef | null>(null);
+    const [festivals, setFestivals] = useState<Array<Festival>>([]);
 
     const componentDidMount = async () => {
         const response = await fetch("https://data.culture.gouv.fr/api/explore/v2.1/catalog/datasets/festivals-global-festivals-_-pl/records?limit=100");
@@ -39,7 +33,6 @@ const PersonalMap = (props): JSX.Element => {
             const temp: Array<Festival> = responseData.results.map(data => {
                 const festival: Festival = {
                     name: data.nom_du_festival,
-                    region: data.region_principale_de_deroulement,
                     departement: data.departement_principal_de_deroulement,
                     city: data.commune_principale_de_deroulement,
                     address: data.adresse_postale,
@@ -56,29 +49,57 @@ const PersonalMap = (props): JSX.Element => {
     }
 
     useEffect(() => {
-            componentDidMount();
-        },
-        []);
+        componentDidMount();
+    }, []);
 
     return (
         <>
             <MapWrapper>
                 <Map
+                    ref={(ref) => setMapRef(ref)}
                     mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN as string}
                     style={{
                         width: "100%",
-                        height: "100%"
+                        height: "100%",
+                        borderRadius: "20px",
+                        zIndex: "1"
                     }}
-                    initialViewState={{...viewPort}}
+                    initialViewState={{
+                        latitude: 46.8590,
+                        longitude: 2.7,
+                        zoom: 5
+                    }}
                     mapStyle="mapbox://styles/666alvin999/clmsr5gad00ij01qndyoge8rd"
                 >
+                    <SearchBar map={mapRef}/>
                     {
-                        festivals.map(festival => <Marker longitude={festival.geocoding[1]} latitude={festival.geocoding[0]}/>)
+                        festivals.map(festival => {
+                            const popup = new mapboxgl.Popup({
+                                offset: 20
+                            } as PopupOptions).setHTML(`
+                             <h2 style="font-size: 16px">${festival.name}</h2>
+                             <h3 style="font-size: 14px">${festival.festivalType}</h3>
+                             <p>${festival.city || ""}, ${festival.departement || ""}</p>
+                             <p>${festival.address || ""}</p>
+                            ${festival.period}
+                            `);
+                            return (
+                                <>
+                                    <Marker
+                                        style={{height: "2px"}}
+                                        color={"red"}
+                                        longitude={festival.geocoding[1]}
+                                        latitude={festival.geocoding[0]}
+                                        popup={popup}
+
+                                    />
+                                </>
+                            )
+                        })
                     }
                     <NavigationControl/>
                 </Map>
             </MapWrapper>
-
         </>
     );
 }
