@@ -1,6 +1,6 @@
 import {PersonalMap} from "./Map";
 
-const Main = (props): JSX.Element => {
+const Main = (): JSX.Element => {
 
     return (
         <>
