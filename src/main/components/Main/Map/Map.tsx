@@ -31,7 +31,7 @@ const PersonalMap = (): JSX.Element => {
     const [festivals, setFestivals] = useState<Array<Festival>>([]);
 
     const componentDidMount = async () => {
-        const response = await fetch("https://data.culture.gouv.fr/api/explore/v2.1/catalog/datasets/festivals-global-festivals-_-pl/records?limit=5");
+        const response = await fetch("https://data.culture.gouv.fr/api/explore/v2.1/catalog/datasets/festivals-global-festivals-_-pl/records?limit=50");
 
         if (response.ok) {
             const responseData = await response.json();
@@ -41,7 +41,7 @@ const PersonalMap = (): JSX.Element => {
             console.log(responseData);
 
             for (let i = 0; i < responseData.results.length; i++) {
-                const weatherApiResponse = await fetch(`https://api.weatherbit.io/v2.0/forecast/daily?lat=${responseData.results[i].geocodage_xy.lat}&lon=${responseData.results[i].geocodage_xy.lon}&lang=fr&key=${process.env.REACT_APP_WEATHER_API_KEY}`)
+                const weatherApiResponse = await fetch(`https://api.weatherbit.io/v2.0/current?lat=${responseData.results[i].geocodage_xy.lat}&lon=${responseData.results[i].geocodage_xy.lon}&lang=fr&key=${process.env.REACT_APP_WEATHER_API_KEY}`)
 
                 if (weatherApiResponse.ok) {
                     const weatherData = await weatherApiResponse.json();
