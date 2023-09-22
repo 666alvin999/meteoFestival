@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/meteoFestival/static/css/main.4441ff7f.css",
-    "main.js": "/meteoFestival/static/js/main.e1aa566e.js",
+    "main.js": "/meteoFestival/static/js/main.29039377.js",
     "static/media/bootstrap.bundle.min.js.map": "/meteoFestival/static/media/bootstrap.bundle.min.js.09676c987f97431d833c.map",
     "index.html": "/meteoFestival/index.html",
     "main.4441ff7f.css.map": "/meteoFestival/static/css/main.4441ff7f.css.map",
-    "main.e1aa566e.js.map": "/meteoFestival/static/js/main.e1aa566e.js.map"
+    "main.29039377.js.map": "/meteoFestival/static/js/main.29039377.js.map"
   },
   "entrypoints": [
     "static/css/main.4441ff7f.css",
-    "static/js/main.e1aa566e.js"
+    "static/js/main.29039377.js"
   ]
 }
